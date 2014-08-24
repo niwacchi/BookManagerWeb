@@ -1,0 +1,40 @@
+<%# -*- coding: utf-8 -*- %>
+<% require 'rubygems' %>
+<% require 'dbi' %>
+
+<% dbh = DBI.connect('DBI:SQLite3:bookinfo_sqlite.db') %>
+<% row = dbh.select_one("select * from bookinfos where id=\'#{target_id}\'") %>
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="default.css">
+	<title>蔵書管理</title>
+</head>
+<body>
+	<h1>蔵書管理</h1>
+	<h2>蔵書データの削除</h2>
+	<p>このデータを削除します|
+	<a href="list.erb">蔵書データの表示</a>|
+	<a href="index.html">メニュー画面に戻る</a></p>
+	<hr>
+	<form method="post" action="delete">
+		<input type="hidden" name="target_id" value="<%= target_id %>" />
+		<table>
+			<tr>
+				<th>項目名</th>
+				<th>削除データ</th>
+			</tr>
+			<% row.each_with_name do |val,name| %>
+			<tr>
+				<td><%= name %></td>
+				<td><%= val.to_s %><input type="hidden" name="<%= name %>" value="<%= val.to_s %>" /></td>
+			</tr>
+			<% end %>
+		</table>
+		<input type="submit" value="削除を実行" />
+	</form>
+	<hr>
+</body>
+</html>
+
